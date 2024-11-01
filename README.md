@@ -102,13 +102,13 @@ Here is the suggested order for Project 4:
 
 1. For a set of interesting inputs for `Relation.join` -- you must consider at least three unique tests: no shared attributes, attributes shared, and a mix of shared and not shared attributes:
 
-  1. Write a positive test that may fail (should fail the first test because no code has been written and may fail other tests depending on the code written for the first test).
-  1. Write code to pass the positive test.
+    1. Write a positive test that may fail (should fail the first test because no code has been written and may fail other tests depending on the code written for the first test).
+    1. Write code to pass the positive test.
 
 1. For a set of interesting inputs for `Interpreter.eval_rules` -- as a starting point consider if number of iterations to reach a fix-point matters in testing or if the number of rules being evaluated matters:
 
-  1. Write a positive test that may fail (should fail the first test because no code has been written and may fail other tests depending on the code written for the first test).
-  1. Write code to pass the positive test.
+    1. Write a positive test that may fail (should fail the first test because no code has been written and may fail other tests depending on the code written for the first test).
+    1. Write code to pass the positive test.
 
 1. Run the pass-off tests -- debug as needed.
 
