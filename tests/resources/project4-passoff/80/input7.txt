@@ -13,13 +13,13 @@ Schemes:
    Roll(c,r,n,s,g)
 
 Facts:
-   snap('1234','Charley','Apple St','555-1234'). 
-   snap('1111','Linus','Piano St','555-1111'). 
-   snap('1212','Lucy','Home Ln','555-1212'). 
-   snap('3333','Marcie','Banana St','555-3333'). 
+   snap('1234','Charley','Apple St','555-1234').
+   snap('1111','Linus','Piano St','555-1111').
+   snap('1212','Lucy','Home Ln','555-1212').
+   snap('3333','Marcie','Banana St','555-3333').
    snap('5678','Patty','Grape Blvd','555-5678').
    snap('7890','Pig Pen','Pear Ave','555-7890').
-   snap('4321','Rerun','Peach St','555-4321'). 
+   snap('4321','Rerun','Peach St','555-4321').
    snap('4444','Sally','Circle Dr','555-4444').
    snap('9876','Snoopy','Doghouse','555-9876').
    snap('0000','Woodstock','Treehouse','555-0000').
@@ -38,7 +38,7 @@ Facts:
    csg('PH100','7890','C+').
    csg('PH100','9876','C+').
    csg('PH100','5678','C+').
-   csg('PH100','4321','C+'). 
+   csg('PH100','4321','C+').
    csg('PH100','0000','A').
    cp('CS101','CS100').
    cp('EE200','EE005').
@@ -67,17 +67,17 @@ Rules:
    Grades(N,C,G):-snap(S,N,A,P),csg(C,S,G).
    Roll(C,R,N,S,G):-snap(S,N,A,P),csg(C,S,G),cr(C,R).
 
-Queries: 
-   snap(S,N,A,P)? 
+Queries:
+   snap(S,N,A,P)?
    snap(Id,'Snoopy',Address,Phone)?
    csg(Course,'33333',Grade)?
    cp(Course,'CS100')?
    cdh('EE200',Day,Hour)?
-   cr('CS101',Room)? 
+   cr('CS101',Room)?
    mwfCourses (Course,Room)?
    Schedule('Snoopy',Course,Room,Day,Hour)?
-   Grades('Snoopy',Course,Grade)? 
+   Grades('Snoopy',Course,Grade)?
    Grades('Woodstock',Course,Grade)?
-   Roll('CS101',Room,Name,Id,Grade)? 
-   Roll('EE200',Room,Name,Id,Grade)? 
+   Roll('CS101',Room,Name,Id,Grade)?
+   Roll('EE200',Room,Name,Id,Grade)?
    Roll('PH100',Room,Name,Id,Grade)?

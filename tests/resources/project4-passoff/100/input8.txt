@@ -30,4 +30,3 @@ combinations(b,c,d,e,a):-combinations(a,b,c,d,e).
 Queries:
 
 combinations(a,b,c,d,e)?
-

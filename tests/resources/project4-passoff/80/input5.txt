@@ -13,19 +13,18 @@ Facts:
    DeaWoo('a','a','a','a','b').
    DeaWoo('a','b','a','a','b').
 
-Rules: 
+Rules:
    DeaWoo(A,B,C,D,E):-A(A),A(B),A(C),A(D),A(E).
-   DeaWoo(A,B,C,D,E):-A(A),A(B),B(C),A(D),A(E). 
-   DeaUoo(E,D,C,B,A):-DeaWoo(E,D,C,B,A),A(B). 
-   DeaVoo(E,D,C,B,A):-DeaUoo(E,D,C,B,A),B(D).
+   DeaWoo(A,B,C,D,E):-A(A),A(B),B(C),A(D),A(E).
+   DeaWoo(A,B,C,D,E):-A(E),B(D),A(C),B(B),A(A).
+   DeaUoo(E,D,C,B,A):-DeaWoo(A,B,C,D,E),A(B).
+   DeaVoo(E,D,C,B,A):-DeaUoo(A,B,C,D,E),B(D).
 
 Queries:
-   DeaUoo(A,B,C,D,E)? 
+   DeaUoo(A,B,C,D,E)?
    DeaUoo(A,B,'a',D,E)?
-   DeaVoo(A,B,C,D,E)?
    DeaVoo(A,B,'a',D,E)?
    DeaUoo(A,B,'b',D,E)?
    DeaWoo(A,B,'a',D,Applestrudle)?
    DeaWoo(A,B,'a',D,E)?
-   DeaWoo(A,B,C,D,E)?
    DeaWoo('a','a','a','a','b')?

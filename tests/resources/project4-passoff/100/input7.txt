@@ -16,4 +16,3 @@ permutations(b,c,d,e,f,a):-permutations(a,b,c,d,e,f).
 Queries:
 
 permutations(a,b,c,d,e,f)?
-

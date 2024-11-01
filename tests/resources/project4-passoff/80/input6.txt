@@ -50,4 +50,4 @@ Queries:
    relativeOf('Mary','Lou')?
    relativeOf('Mary','Bill')?
    relativeOf('Mary','Anna')?
-   relativeOf('Mary','Kim')? 
+   relativeOf('Mary','Kim')?

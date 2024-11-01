@@ -1,2 +1,0 @@
-# dependancy==version
-pytest==7.3.1
