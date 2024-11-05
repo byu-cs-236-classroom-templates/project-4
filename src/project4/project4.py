@@ -4,10 +4,11 @@ from sys import argv
 from typing import Iterator
 
 from project4.interpreter import Interpreter
-from project4.datalogprogram import DatalogProgram
+from project4.datalogprogram import DatalogProgram, Predicate, Rule
 from project4.lexer import lexer
 from project4.parser import parse, UnexpectedTokenException
-from project4.reporter import query_report
+from project4.relation import Relation
+from project4.reporter import project_4_report
 from project4.token import Token
 
 
@@ -20,8 +21,8 @@ def project4(input_string: str) -> str:
     matching with an appropriate reporter interface.
 
     Returns:
-        answer (str): The string representing the answers for each query in the
-        given Datalog program or a parse failure.
+        answer (str): The string representing the rule evaluation and the answers for
+        each query in the given Datalog program or a parse failure.
     """
     token_iterator: Iterator[Token] = lexer(input_string)
     try:
@@ -29,7 +30,15 @@ def project4(input_string: str) -> str:
         interpreter: Interpreter = Interpreter(datalog_program)
         interpreter.eval_schemes()
         interpreter.eval_facts()
-        answer = "\n".join([query_report(i, j) for i, j in interpreter.eval_queries()])
+        rule_evals: list[tuple[Relation, Rule, Relation]] = [
+            i for i in interpreter.eval_rules()
+        ]
+        query_evals: list[tuple[Predicate, Relation]] = [
+            i for i in interpreter.eval_queries()
+        ]
+        answer: str = project_4_report(
+            len(datalog_program.rules), rule_evals, query_evals
+        )
         return answer
     except UnexpectedTokenException as e:
         return "Failure!\n  " + str(e.token)
