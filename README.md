@@ -1,9 +1,13 @@
 # Project 4
 
 
-This project uses the `lexer` and `parser` functions from Project 1 and Project 2 to get an instance of a `DatalogProgram`. It also uses the `Interpreter.eval_schemes`, `Interpreter.eval_facts`, and `Interpreter.eval_queries` from Project 3. Project 4 must evaluate the rules in the Datalog program to generate new facts.
+This project uses the `lexer` and `parser` functions from Project 1 and Project 2 to get an instance of a `DatalogProgram`. It also uses the `Interpreter.eval_schemes`, `Interpreter.eval_facts`, and `Interpreter.eval_queries` from Project 3. Project 4 must evaluate the rules in the Datalog program to add new facts to relations that exist in the database. This will be done by implementing the `Interpreter.eval_rule` function according to the algorithm specified in the project description on [learningsuite.byu.edu](http://learningsuite.byu.edu) in the _Content_ section under _Projects_ -> _Project 4_.
 
-The rule evaluation **must be implemented with relational algebra.** No exceptions. Rule evaluation should re-use the existing code for `Interpreter.eval_query` to create relations for each part of the rule and then use `Interpreter.join` to combine those relations.
+The rule evaluation **must be implemented with relational algebra.** No exceptions. Rule evaluation should re-use the existing code for `Interpreter.eval_query` from Project 3 to create intermediate relations.
+
+Why do we use `Interpreter.eval_query` for evaluating rules? Consider this example rule: `R(X,Z) :- G(X,Y,'a'), R(Y,Z).` To evaluate this rule, we need to first compute the operands to the _join_ operation. The left operand is given by `G(X,Y,'a')` and the right operand is given by `R(Y,Z)`. Assuming that the relations are declared in the _Schemes_ section of the Datalog program as `G(A,B,C)` and `R(A,B)` respectively, then the relation for the left operand is `left = rename([X,Y], project([A,B], (select(C = 'a', G)))` and the relation for the right operand is `right = rename([Y,Z], project([A,B], R))`. These two operands are **the resulting relations when each operand is treated as a query**.
+
+The `,` in the rule represents join. The head predicate in our rule, `R(X,Z)`, tells us how to format the final relation from the join: `project([X,Z], join(left, right))`. The tuples in this final relation are added to the relation `R` in the database. That may require a rename operation to use `Relation.union`. Rules are evaluated, in order, until no new facts are added to any of the relations in the database. The `Relation.union` relational operator must be used for Project 4. Whether you implemented union in Project 3 or will implement it in Project 4, you should include unit tests for this operation.
 
 **Before proceeding further, please review the Project 4 project description, lecture slides, and all of the associated Jupyter notebooks. You can thank us later for the suggestion.**
 
@@ -88,6 +92,8 @@ The entry point for the auto-grader and the `project4` command. See the docstrin
 The only part of the `Relation` class that needs to be implemented for Project 4 is `join` (hard). The docstring describe what the function should do. **You are expected to write one negative test for `join` and at least three positive tests: one for when there are no shared attributes, one for when all the attributes are shared, and one from when the is a mix of each.**
 
 You are expected to write one test, run it to see what happens (likely fail), and then write the code to pass that one test. Repeat the process for each test. As before, a negative test is one where an error is expected (e.g., bad operands to an operation).
+
+The `Relation.union` relational operator must be used for Project 4. Whether you implemented union in Project 3 or will implement it in Project 4, you should include unit tests for this operation.
 
 ### reporter.py
 
