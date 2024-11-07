@@ -47,16 +47,18 @@ The above should result in a `project4` executable that is run from the command 
 
 ### Copy Files
 
-Copy the below files from your solution to Project 4 into the `src/project4/` folder:
+Copy the below files from your solution to Project 3 into the `src/project4/` folder:
 
   * `datalogprogram.py`
   * `fsm.py`
+  * `interpreter.py`
   * `lexer.py`
   * `parser.py`
+  * `relation.py`
   * `./tests/test_relation.py`
   * `./tests/test_interpreter.py`
 
-The `token.py` file is unchanged here and should not be copied over. None of test files from Project 1 should be copied over either.
+The `token.py` file is unchanged here and should not be copied over. Other test files from older projects can be copied as needed.
 
 ### Reminder
 
