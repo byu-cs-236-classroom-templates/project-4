@@ -2,7 +2,7 @@
 
 from functools import reduce
 
-from project4.datalogprogram import Predicate
+from project4.datalogprogram import Predicate, Rule
 from project4.relation import Relation, RelationTuple
 
 
@@ -20,6 +20,25 @@ def _tuple_to_str(header: list[str], r: RelationTuple) -> str:
     assert len(header) == len(r)
     entries = [f"{i[0]}={i[1]}" for i in zip(header, r)]
     return ", ".join(entries)
+
+
+def project_4_report(
+    num_rule: int,
+    rule_evals: list[tuple[Relation, Rule, Relation]],
+    query_evals: list[tuple[Predicate, Relation]],
+) -> str:
+    """The string representation for the project 4 report
+
+    Assumes (and enforces) at least rule and at least one entry in each list.
+    """
+    assert num_rule > 0 and len(rule_evals) > 0 and len(query_evals) > 0
+
+    rule_reports = "\n".join([rule_report(i, j, k) for i, j, k in rule_evals])
+    query_reports = "\n".join([query_report(i, j) for i, j in query_evals])
+    num_passes = len(rule_evals) // num_rule
+    passes = f"Schemes populated after {num_passes} passes through the Rules."
+
+    return f"Rule Evaluation\n{rule_reports}\n\n{passes}\n\nQuery Evaluation\n{query_reports}"
 
 
 def query_report(query: Predicate, answer: Relation) -> str:
@@ -44,3 +63,27 @@ def query_report(query: Predicate, answer: Relation) -> str:
     entries = [_tuple_to_str(answer.header, row) for row in tuples]
     entries_str = "\n  ".join(entries)
     return f"{query}? Yes({len(tuples)})\n  {entries_str}"
+
+
+def rule_report(before: Relation, rule: Rule, after: Relation) -> str:
+    """The string representation of a rule evaluation report
+
+    Here the format is the rule followed by the printing of the tuples
+    newly added. These are determined with the `before` and `after`
+    relations.
+
+    r(E,F) :- f(E,F).
+      e='1', f='2'
+      e='4', f='3'
+    """
+    assert before.header == after.header
+    tuples: list[RelationTuple] = sorted(
+        after.set_of_tuples.difference(before.set_of_tuples)
+    )
+
+    if len(tuples) == 0:
+        return f"{rule}."
+
+    entries = [_tuple_to_str(after.header, row) for row in tuples]
+    entries_str = "\n  ".join(entries)
+    return f"{rule}.\n  {entries_str}"
