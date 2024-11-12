@@ -19,7 +19,7 @@ As in Project 3, the first step is to clone the repository created by GitHub Cla
 
 There is no need to install any vscode extensions. These should all still be present and active from the previous project. You do need to create the virtual environment, install the package, and install pre-commit. For a reminder to how that is done, see on [learningsuite.byu.edu](https://learningsuite.byu.edu) _Content_ &rarr; _Projects_ &rarr; _Projects Cheat Sheet_
 
-  * Create a virtual environment: **be sure to create it in the `project-3` folder.** `python -m venv .venv`
+  * Create a virtual environment: **be sure to create it in the `project-4` folder.** `python -m venv .venv`
   * Activate the virtual environment: `source .venv/bin/activate` or `.venv\Scripts\activate` for OSX and windows respectively.
   * Install the package in edit mode: `pip install --editable ".[dev]"`
   * Install pre-commit: `pre-commit install`
