@@ -124,16 +124,16 @@ class Interpreter:
         """
         raise NotImplementedError
 
-    def get_rule_dependency_graph(self) -> dict[str, list[str]]:
+    def get_rule_dependency_graph(self) -> dict[int, list[int]]:
         """Return the rule dependency graph.
 
         Computes and returns the graph formed by dependencies between rules.
         The graph is used to compute strongly connected components of rules
         for optimized rule evaluation.
 
-        Rules are zero-indexed so the first rule in the Datalog program is `R0`,
-        the second rules is `R1`, etc. A return of `{R0 : [R0, R1], R1 : [R2]}`
-        means that `R0` has edges to `R0` and `R1`, and `R1` has an edge to `R2`.
+        Rules are zero-indexed so the first rule in the Datalog program is `0`,
+        the second rules is `1`, etc. A return of `{0 : [0, 1], 1 : [2]}`
+        means that `0` has edges to `0` and `1`, and `1` has an edge to `2`.
 
         Returns:
             out: A map with an entry for each rule and the associated rules connected to it.
