@@ -91,9 +91,7 @@ The entry point for the auto-grader and the `project4` command. See the docstrin
 
 ### relation.py
 
-The only part of the `Relation` class that needs to be implemented for Project 4 is `join` (hard). The docstring describe what the function should do. **You are expected to write one negative test for `join` and at least three positive tests: one for when there are no shared attributes, one for when all the attributes are shared, and one from when the is a mix of each.**
-
-You are expected to write one test, run it to see what happens (likely fail), and then write the code to pass that one test. Repeat the process for each test. As before, a negative test is one where an error is expected (e.g., bad operands to an operation).
+The only part of the `Relation` class that needs to be implemented for Project 4 is `join` (hard). The docstring describe what the function should do. **You are expected to write at least three positive tests for `join`: one for when there are no shared attributes, one for when all the attributes are shared, and one from when the is a mix of each.**
 
 The `Relation.union` relational operator must be used for Project 4. Whether you implemented union in Project 3 or will implement it in Project 4, you should include unit tests for this operation.
 
@@ -104,9 +102,6 @@ A module for output matching in the pass-off tests. It takes the interface defin
 ## Where to start
 
 Here is the suggested order for Project 4:
-
-1. Write a negative test that fails for `Relation.join`.
-1. Write code to pass the negative test.
 
 1. For a set of interesting inputs for `Relation.join` -- you must consider at least three unique tests: no shared attributes, attributes shared, and a mix of shared and not shared attributes:
 
