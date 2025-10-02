@@ -18,7 +18,7 @@ Examples:
     (ID,"id",42)
 """
 
-from typing import Literal, Any
+from typing import Any, Literal
 
 TokenType = Literal[
     "COLON",
@@ -66,8 +66,6 @@ class Token:
         line_num (int): The line number associated with the token -- where it starts in the input.
     """
 
-    __slots__ = ["token_type", "value", "line_num"]
-
     def __init__(self, token_type: TokenType, value: str, line_num: int = 0) -> None:
         """Initialize a `Token` with its type, value, and line number.
 
@@ -82,9 +80,6 @@ class Token:
         self.token_type: TokenType = token_type
         self.value: str = value
         self.line_num: int = line_num
-
-    def __repr__(self) -> str:
-        return f"Token(token_type={self.token_type!r}, value={self.value!r}, line_num={self.line_num!r})"
 
     def __str__(self) -> str:
         """Return the string representation of the token

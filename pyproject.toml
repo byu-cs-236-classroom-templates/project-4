@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=69.5.1"]
+requires = ["setuptools>=74.1.2"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -10,6 +10,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
   "tabulate",
+  "types-tabulate",
 ]
 
 [project.scripts]
@@ -17,26 +18,28 @@ project4 = "project4.project4:project4cli"
 
 [project.optional-dependencies]
 dev = [
-  "pytest>=8.3.1",
+  "pytest",
   "mypy",
   "pre-commit",
-  "types-tabulate",
-
+  "ruff",
+  "ipykernel",
+  "ipytest",
 ]
 
 classroom = [
-  "pytest>=8.3.1",
+  "pytest",
 ]
 
 [tool.ruff]
 target-version = "py312"
+lint.extend-select = ["I","FIX002", "TD001"]
 
 [tool.nitpick]
 style = "https://raw.githubusercontent.com/wemake-services/wemake-python-styleguide/master/styles/mypy.toml"
 
 [tool.mypy]
 exclude = [
-  "^test",
+  "(^|/)tests?/",
 ]
 check_untyped_defs = true
 strict = true

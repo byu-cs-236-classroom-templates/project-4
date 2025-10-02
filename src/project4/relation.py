@@ -1,7 +1,8 @@
 """Relation type for interpreting Datalog."""
 
-from tabulate import tabulate
 from typing import Any
+
+from tabulate import tabulate
 
 
 class IncompatibleOperandError(Exception):
@@ -27,8 +28,6 @@ class Relation:
         header (list[str]): The relation header.
         set_of_tuples (set[RelationTuple]): The tuples belonging to the relation.
     """
-
-    __slots__ = ["header", "set_of_tuples"]
 
     def __eq__(self, other: Any) -> bool:
         if not isinstance(other, Relation):
@@ -153,6 +152,22 @@ class Relation:
         Raises:
             error (IncompatibleOperandError): Error if the length of `to` doesn't
             match the length of the header in this relation.
+        """
+        raise NotImplementedError
+
+    def reorder(self, to: list[str]) -> "Relation":
+        """The reorder of this relation to a new order on the header.
+
+        The length of `to` must match the length of the header. And the names in
+        `to` must match the names in the header albeit in the same or different order.
+        The tuples in the final relation are the tuples in the current relation
+        reordered to match the order in `to`. The header for the final relation should
+        also match `to`.
+
+        Returns:
+            r (Relation): A new relation that is this relation with the header and tuples reordered to `to`.
+        Raises:
+            error (IncompatibleOperandError): Error if `to` has more entries than what is in this relation's header or has an name that is not in this relation's header.
         """
         raise NotImplementedError
 

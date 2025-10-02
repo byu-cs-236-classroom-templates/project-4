@@ -24,8 +24,6 @@ class Parameter:
         parameter_type (ParameterType): The type of the parameter: ID or STRING.
     """
 
-    __slots__ = ["value", "parameter_type"]
-
     def __init__(self, value: str, parameter_type: ParameterType) -> None:
         self.value = value
         self.parameter_type = parameter_type
@@ -76,9 +74,7 @@ class Predicate:
         parameters (list[Parameter]): The parameter list.
     """
 
-    __slots__ = ["name", "parameters"]
-
-    def __init__(self, name: str, parameters: list[Parameter] = []) -> None:
+    def __init__(self, name: str, parameters: list[Parameter]) -> None:
         self.name = name
         self.parameters = parameters
 
@@ -118,8 +114,6 @@ class Rule:
         predicates (list[Predicate]): The list of predicates comprising this rule.
     """
 
-    __slots__ = ["head", "predicates"]
-
     def __init__(self, head: Predicate, predicates: list[Predicate]) -> None:
         self.head = head
         self.predicates = predicates
@@ -150,14 +144,12 @@ class DatalogProgram:
         queries (list[Predicate]): The list of queries as predicates.
     """
 
-    __slots__ = ["schemes", "facts", "rules", "queries"]
-
     def __init__(
         self,
-        schemes: list[Predicate] = [],
-        facts: list[Predicate] = [],
-        rules: list[Rule] = [],
-        queries: list[Predicate] = [],
+        schemes: list[Predicate],
+        facts: list[Predicate],
+        rules: list[Rule],
+        queries: list[Predicate],
     ):
         self.schemes = schemes
         self.facts = facts
