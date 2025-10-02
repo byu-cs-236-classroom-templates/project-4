@@ -1,5 +1,6 @@
 # type: ignore
 import pytest
+
 from project4.relation import IncompatibleOperandError, Relation
 
 

@@ -6,8 +6,8 @@ programs.
 
 from typing import Iterator
 
-from project4.token import Token, TokenType
 from project4.datalogprogram import DatalogProgram
+from project4.token import Token, TokenType
 
 
 class UnexpectedTokenException(Exception):
@@ -22,8 +22,6 @@ class UnexpectedTokenException(Exception):
         expected_type (TokenType): The type that was expected in the parse.
         token (Token): The actual token that was encountered.
     """
-
-    __slots__ = ["expected_type", "token"]
 
     def __init__(
         self,
@@ -49,8 +47,6 @@ class TokenStream:
         token_iterator (Iterator[Token]): A token iterator.
         token (Token): The current token.
     """
-
-    __slots__ = ["token", "_token_iterator"]
 
     def __init__(self, token_iterator: Iterator[Token]) -> None:
         self._token_iterator = token_iterator

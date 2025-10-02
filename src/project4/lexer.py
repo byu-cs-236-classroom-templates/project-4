@@ -17,8 +17,8 @@ Examples:
 
 from typing import Iterator
 
+from project4.fsm import Colon, Eof, FiniteStateMachine, WhiteSpace
 from project4.token import Token, TokenType
-from project4.fsm import FiniteStateMachine, Colon, Eof, WhiteSpace
 
 
 def lexer(input_string: str) -> Iterator[Token]:
@@ -53,11 +53,7 @@ def lexer(input_string: str) -> Iterator[Token]:
     Yields:
         token: The current token resulting from the string.
     """
-    fsms: list[FiniteStateMachine] = [Colon(), Eof(), WhiteSpace()]
-    hidden: list[TokenType] = ["WHITESPACE"]
-
-    # TODO: remove the `print` statements since they are only here for ruff
-    print(fsms)
-    print(hidden)
+    fsms: list[FiniteStateMachine] = [Colon(), Eof(), WhiteSpace()]  # noqa: F841
+    hidden: list[TokenType] = ["WHITESPACE"]  # noqa: F841
 
     raise NotImplementedError

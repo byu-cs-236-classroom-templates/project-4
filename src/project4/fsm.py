@@ -2,33 +2,44 @@
 
 The finite state machine (FSM) is abstracted by the `FiniteStateMachine` class.
 The function `run_fsm(fsm, input_string)` runs the indicated `fsm` until it
-accepts or rejects to return the resulting characters read and token.
+is "done" and then checks if it accepts or rejects to return the resulting characters
+read and token.
+
+TL;DR returning `True` from a State when given an input means that the FSM is
+done and it is safe to check if the resulting state is an accept or reject state
+to determine if it reads a prefix of the input.
+
+An FSM normally reads until there are no more characters left in the input
+and then it checks what state it is in to determine whether it accepts or rejects.
+In our application to lexical analysis we want the FSM to stop reading as soon as it
+determines it is done reading and knows if it will accept or reject. As such, the
+end of input is marked when the FSM signals it is "done" by returning `True` when
+computing the next state. At that point, it is safe to check if the FSM is in an
+accept or reject state to know whether or not it reads a prefix of the input and
+how many characters are in that prefix that it can read.
 """
 
+from io import StringIO
 from typing import Callable
+
 from project4.token import Token
 
-
-State = Callable[[int, str], "StateAndOutput"]
+State = Callable[[str], tuple[bool, "State"]]
 """
-`State` is a function that takes two inputs and returns a new state with the
-new output. The `int` input is the number of characters read. The `str`
-input is the character to read. The output is the new state and the new
-number of characters read.
-"""
-StateAndOutput = tuple[State, int]
-"""
-The `State` is the new state resulting from the input while the `int` is the
-new output resulting from the input.
+`State` is a function that takes the character to read as a `str` and returns
+a `bool` signifying whether or not it is done reading and the next `State`
+(`State` : `I` -> `bool` times `State`).
 """
 
 
 def run_fsm(fsm: "FiniteStateMachine", input_string: str) -> tuple[int, Token]:
     """Run an FSM and return the number of characters read with the token.
 
-    Run the passed in FSM until it accepts or rejects. The output is captured
-    on each state transition and passed as input with the next character. It returns
-    the number or character read and the resulting token.
+    Run the FSM until it accepts or rejects while counting the number of
+    characters read until the FSM is done. Once the FSM is done, check to see
+    if it accepts or rejects the input. The return value is a tuple of the total
+    number of characters read and the resulting token if the FSM accepts.
+    A reject always reads no characters.
 
     Args:
 
@@ -41,54 +52,45 @@ def run_fsm(fsm: "FiniteStateMachine", input_string: str) -> tuple[int, Token]:
 
     Examples:
 
-        >>> from project4.fsm import run_fsm, Colon
+        >>> from project3.fsm import run_fsm, Colon
         >>> colon = Colon()
         >>> input_string = ": a"
         >>> number_chars_read, token = run_fsm(colon, input_string)
         >>> "number_chars_read = {} token = {}".format(number_chars_read, str(token))
         'number_chars_read = 1 token = (COLON,":",0)'
     """
-    current_state: State = fsm.initial_state
-    next_state: State
+    stream: StringIO = StringIO(input_string)
+    done, state = fsm.initial_state(stream.read(1))
+    num_chars_read: int = 0
 
-    output_num_chars_read: int = 0
+    while not done:
+        num_chars_read = num_chars_read + 1
+        done, state = state(stream.read(1))
 
-    input_num_chars_read: int = 0
-    input_char: str = ""
+    if FiniteStateMachine.is_reject(state):
+        num_chars_read = 0
+    elif FiniteStateMachine.is_accept(state):
+        pass
+    else:
+        raise AssertionError(f"ERROR: unexpected {state!r}")
 
-    number_of_chars = len(input_string)
-    for i in range(0, number_of_chars + 1):
-        input_num_chars_read = output_num_chars_read
-        input_char = input_string[i] if i < number_of_chars else ""
-
-        next_state, output_num_chars_read = current_state(
-            input_num_chars_read, input_char
-        )
-        if next_state in {
-            FiniteStateMachine.s_accept,
-            FiniteStateMachine.s_reject,
-        }:
-            break
-
-        current_state = next_state
-
-    value = input_string[:output_num_chars_read]
-    return (output_num_chars_read, fsm.token(value))
+    value = input_string[:num_chars_read]
+    return num_chars_read, fsm.token(value)
 
 
 class FiniteStateMachine:
     """Base class for the finite state machine (FSM) abstraction.
 
-    The base class defines the accept and reject states. The reject state
-    will always return zero characters read. Once accept/reject, then always
-    accept/reject. The output does not change once in these states. The
-    `token` function should be overridden in each subclass.
+    The base class defines how to detect accept and reject states
+    based on the name of the functions defining the states.
+    It also provides an "always done and accept" state along with
+    an "always done and reject" state.
+
+    Note: The `token` function should be overridden in each subclass.
 
     Attributes:
         initial_state (State): The initial state for this FSM.
     """
-
-    __slots__ = ["initial_state"]
 
     def __init__(self, initial_state: State) -> None:
         """Initialize the FSM with its initial state
@@ -101,25 +103,54 @@ class FiniteStateMachine:
     def token(self, value: str) -> Token:
         """Return the token produced by this FSM
 
-        NOTE: this method must be overridden in any subclass as it defaults to UNDEFINED
+        NOTE: this method must be overridden in every subclass. as
+        the base class always returns Token.UNDEFINED
 
         Args:
             value: The value associated with this `Token`.
 
         Returns:
-            Token.undefined: The method must be overridden in subclasses.
+            token: The token generated by the FSM when it accepts.
         """
         return Token.undefined(value)
 
     @staticmethod
-    def s_accept(input_chars_read: int, input_char: str) -> StateAndOutput:
-        """Accept sync state -- once accept always accept."""
-        return FiniteStateMachine.s_accept, input_chars_read
+    def is_accept(state: State) -> bool:
+        """Return true if and only if `state` is an accept state
+
+        Any `State` with `accept` in its name is an accept state.
+
+        Args:
+            state: The state being considered.
+
+        Return:
+            True if and only if `state` has accept in its name.
+        """
+        return "accept" in state.__name__
 
     @staticmethod
-    def s_reject(input_chars_read: int, input_char: str) -> StateAndOutput:
-        """Reject sync state -- once reject always reject."""
-        return FiniteStateMachine.s_reject, input_chars_read
+    def is_reject(state: State) -> bool:
+        """Return true if and only if `state` is not an accept state
+
+        Any `State` that is not an accept state.
+
+        Args:
+            state: The state being considered.
+
+        Return:
+            True if and only if `state` is not an accept state
+        """
+        return not FiniteStateMachine.is_accept(state)
+
+    @staticmethod
+    def s_is_done_accept(input_char: str) -> tuple[bool, State]:
+        """Always done and always accept regardless of `input_char`"""
+        return True, FiniteStateMachine.s_is_done_accept
+
+    @staticmethod
+    def s_is_done_reject(input_char: str) -> tuple[bool, State]:
+        """Always done and always reject regardless of `input_char`"""
+        return True, FiniteStateMachine.s_is_done_reject
 
 
 class Colon(FiniteStateMachine):
@@ -129,15 +160,11 @@ class Colon(FiniteStateMachine):
     def token(self, value: str) -> Token:
         """Create a token of type COLON.
 
-        NOTE: the match statement is for mypy as it ensures that mypy is able to statically
-        prove that `value` is ":" when calling `Token.colon(value)`. Follow the pattern for
-        other keyword FSMs.
-
         Args:
             value: The characters read by the FSM.
 
         Returns:
-            Token.colon: iff what is read is a ":" otherwise Token.undefined -- both use `value` for the token.
+            Token.COLON: iff what is read is a ":" otherwise Token.UNDEFINED.
         """
         match value:
             case ":":
@@ -146,11 +173,11 @@ class Colon(FiniteStateMachine):
                 return super().token(value)
 
     @staticmethod
-    def s_0(input_chars_read: int, input_char: str) -> StateAndOutput:
+    def s_0(input_char: str) -> tuple[bool, State]:
         if input_char == ":":
-            return FiniteStateMachine.s_accept, input_chars_read + 1
+            return False, FiniteStateMachine.s_is_done_accept
         else:
-            return FiniteStateMachine.s_reject, 0
+            return True, FiniteStateMachine.s_is_done_reject
 
 
 class Eof(FiniteStateMachine):
@@ -158,6 +185,14 @@ class Eof(FiniteStateMachine):
         super().__init__(Eof.s_0)
 
     def token(self, value: str) -> Token:
+        """Create a token of type EOF.
+
+        Args:
+            value: The characters read by the FSM.
+
+        Returns:
+            Token.EOF: iff what is read is an empty string otherwise Token.UNDEFINED.
+        """
         match value:
             case "":
                 return Token.eof(value)
@@ -165,11 +200,11 @@ class Eof(FiniteStateMachine):
                 return super().token(value)
 
     @staticmethod
-    def s_0(input_chars_read: int, input_char: str) -> StateAndOutput:
+    def s_0(input_char: str) -> tuple[bool, State]:
         if input_char == "":
-            return FiniteStateMachine.s_accept, input_chars_read + 1
+            return False, FiniteStateMachine.s_is_done_accept
         else:
-            return FiniteStateMachine.s_reject, 0
+            return True, FiniteStateMachine.s_is_done_reject
 
 
 class WhiteSpace(FiniteStateMachine):
@@ -177,13 +212,28 @@ class WhiteSpace(FiniteStateMachine):
         super().__init__(WhiteSpace.s_0)
 
     def token(self, value: str) -> Token:
-        return Token.whitespace(value)
+        """Create a token of type WHITESPACE.
+
+        Args:
+            value: The characters read by the FSM.
+
+        Returns:
+            Token.WHITESPACE: iff what is read is whitespace otherwise Token.UNDEFINED.
+        """
+        if value.isspace():
+            return Token.whitespace(value)
+        return super().token(value)
 
     @staticmethod
-    def s_0(input_chars_read: int, input_char: str) -> StateAndOutput:
+    def s_0(input_char: str) -> tuple[bool, State]:
         if input_char in [" ", "\t", "\r", "\n"]:
-            return WhiteSpace.s_0, input_chars_read + 1
-        elif input_chars_read > 0:
-            return FiniteStateMachine.s_accept, input_chars_read
+            return False, WhiteSpace.s_accept
         else:
-            return FiniteStateMachine.s_reject, 0
+            return True, FiniteStateMachine.s_is_done_reject
+
+    @staticmethod
+    def s_accept(input_char: str) -> tuple[bool, State]:
+        if input_char in [" ", "\t", "\r", "\n"]:
+            return False, WhiteSpace.s_accept
+        else:
+            return True, FiniteStateMachine.s_is_done_accept

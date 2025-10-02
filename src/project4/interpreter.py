@@ -22,8 +22,6 @@ class Interpreter:
         datalog (DatalogProgram): The Datalog program to interpret.
     """
 
-    __slots__ = ["datalog"]
-
     def __init__(self, datalog: DatalogProgram) -> None:
         self.datalog = datalog
 
