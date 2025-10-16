@@ -43,7 +43,7 @@ Here are the files to copy from Project 3 into the `src/project4/` folder:
 
 The `token.py` file is unchanged here and should not be copied over. Other test files from older projects can be copied as needed.
 
-**You need to fix all the imports in the copied file to replace `project3` to `project4` in the import path. You also need to make these changes in all the docstring tests. We recommend the use of the search feature in `vscode`, the magnifying class in the sidebar, to search for `project3` in all files.**
+**You need to fix all the imports in the copied file to replace `project3` with `project4` in the import path. You also need to make these changes in all the docstring tests. We recommend the use of the search feature in `vscode`, the magnifying class in the sidebar, to search for `project3` in all files.**
 
 ## Project Requirements
 
