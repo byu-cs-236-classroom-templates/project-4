@@ -2,16 +2,19 @@
 
 This project uses the `lexer` and `parser` functions from Project 1 and Project 2 to get an instance of a `DatalogProgram`. It also uses the `Interpreter.eval_schemes`, `Interpreter.eval_facts`, and `Interpreter.eval_queries` from Project 3. Project 4 must evaluate the rules in the Datalog program to add new facts to relations that exist in the database. This will be done by implementing the `Interpreter.eval_rule` function according to the algorithm specified in [RULE_INTERP.md](docs/RULES_INTERP.md).
 
-Why do we use `Interpreter.eval_query` for evaluating rules? Consider this example rule: `R(X,Z) :- G(X,Y,'a'), R(Y,Z).` To evaluate this rule, we need to first compute the operands to the _join_ operation. The left operand is given by `G(X,Y,'a')` and the right operand is given by `R(Y,Z)`. Assuming that the relations are declared in the _Schemes_ section of the Datalog program as `G(A,B,C)` and `R(A,B)` respectively, then the relation for the left operand is `left = rename([X,Y], project([A,B], (select(C = 'a', G)))` and the relation for the right operand is `right = rename([Y,Z], project([A,B], R))`. These two operands are **the resulting relations when each operand is treated as a query**.
+You will write three algorithms (and necessary helper functions) for this Project:
+- The algorithm for natural join
+- The algorithm for rule evaluation
+- The code for the fixed point algorithm
+Each of these algorithms is described in [RULE_INTERP.md](docs/RULES_INTERP.md). A step-by-step example of using natural join and running the rule evaluation algorithm is given in [Evaluating_Rules_Algorithm.pdf](docs/Evaluating_Rules_Algorithm.pdf).
 
-The `,` in the rule represents join. The head predicate in our rule, `R(X,Z)`, tells us how to format the final relation from the join: `project([X,Z], join(left, right))`. The tuples in this final relation are added to the relation `R` in the database. That may require a rename operation to use `Relation.union`. Rules are evaluated, in order, until no new facts are added to any of the relations in the database. The `Relation.union` relational operator must be used for Project 4. Whether you implemented union in Project 3 or will implement it in Project 4, you should include unit tests for this operation.
 
 **Summary of Documentation**
 
 - [README.md](README.md): describes project logistics
 - [RULES_INTERP.md](docs/RULES_INTERP.md): describes how to use relational operators to interpret rules in Datalog
 - [CODE.md](docs/CODE.md): describes the starter code
-- [Testing Natural Join](docs/Project4_Guide.ipynb) (Jupyter Notebook)
+- [Evaluating_Rules_Algorithm.pdf](docs/Evaluating_Rules_Algorithm.pdf): gives a step-by-step example of applying natural join and the rule evaluation algorithm for a specific Datalog program.
 - Lecture notes in [learningsuite.byu.edu](https://learningsuite.byu.edu) and specifically the slides in the lecture _Project 4 Discussion_.
 
 **You are strongly encouraged to review the above documentation _before_ proceeding further**.
@@ -50,10 +53,10 @@ The `token.py` file is unchanged here and should not be copied over. Other test 
 1. The project must be completed individually -- there is no group work.
 1. Project pass-off is on GitHub. You will commit your final solution to the `master` branch of your local repository and then push that commit to GitHub. Multiple commits, and pushes, are allowed. A push triggers a GitHub action that is the auto-grader for pass-off. The TAs look at both the result of the auto-grader on GitHub and your code to determine your final score. Projects that use iteration instead of tail recursion will not be accepted.
 1. You must pass all integration tests up to, and including, `tests/test_passoff_80.py` to move on to the next project. Bucket 80 is the minimum functionality to complete the course.
-1. You must **_"do the math"_** to write positive and negative tests in `tests/test_relation.py` for `Relation.join` in `src/project3/relation.py`. AI may be used to generate the code for the testing the function once you **_"do the math"_** for the inputs and outputs and write a few examples for the AI to follow using your inputs and outputs. See [AI Policy for Project 3](#ai-policy-for-project-3) for details.
+1. You must **use the math you did in Homework 16** to write positive and negative tests in `tests/test_relation.py` for `Relation.join` in `src/project3/relation.py`. AI may be used to generate the code for the testing the function once you **_"do the math"_** for the inputs and outputs and write a few examples for the AI to follow using your inputs and outputs. See [AI Policy for Project 3](#ai-policy-for-project-3) for details.
 1. You must implement `Relation.join` in `src/project3/relation.py`. **AI may not be used for any part of the implementation.**
 1. You must interpret the Datalog program, including the rules, with relational algebra by implementing `Interpreter.eval_rules` in `src/project3/interpreter.py`. The other functions will be implemented in later projects. See [RULES_INTERP.md](docs/RULES_INTERP.md) for details. **AI may not be used for any part of the implementation.**
-1. You must use [input partitioning](#input-partitioning) to write tests for `join` and `eval_rules` using the pattern demonstrated in the Project 3 Jupyter notebook tutorial. We won't be looking for a perfect partitioning of the input when we grade your tests, but we will be looking to see if you made an effort to generate tests that had good test coverage. After you **do the math** to find inputs for each of the partitions, then you may use AI to generate the code for the actual tests. We suggest that you use a parameterized test.
+1. You must use the `Relation.union` relational operator. Whether you implemented union in Project 3 or will implement it in Project 4, you should run the unit tests provided in Project 3's starter code.
 1. Your code must not report any issues with the following code quality tool run in the integrated `vscode` terminal from the root of the project directory: `pre-commit run --all-files`. This tool includes _type checking_, which means that type annotations are required in your code.
 1. Your code must pass each bucket in 150 seconds or less. If you have trouble meeting this requirement, see the FAQ in [RULES_INTERP](docs/RULES_INTERP.md).
 
@@ -63,13 +66,13 @@ Consider using a branch as you work on your submission so that you can `commit` 
 
 Project 4 code is very algorithmic and specific to interpreting Datalog rules. It does not include repeated code with similar structure that AI can learn, adapt, and repeat. As such, you are expected to write all the implementation code for `Relation.join` class and `Interpreter.eval_rules` class without any AI assist.
 
-AI may be used to help generate code for tests **after you "Do the math" to figure out the input and expected output**. In this application, you figure out the computation with the math, and the AI then generates the test code for your given input and output relations.
+AI may be used to help generate code for tests. You've already done the math in Homework 16, and you use the math from Homework 16 as part of the prompts for AI o generate the test code for your given input and output relations.
 
 We recommend that the test code for `eval_rules` be parameterized since the test for each input is the same while there should be least one test for each input partition.
 
 ## Unit Tests
 
-You must write tests for `Relation.join` and `Interpreter.eval_rules`. These tests should be derived from input partitioning -- divide the input space into interesting partitions and create a test for each partition.
+You must write tests for `Relation.join` and `Interpreter.eval_rules`. These tests should be derived from input partitioning -- divide the input space into interesting partitions and create a test for each partition. Homework 16 guides you through the process of writing good tests. Note that Homework 16 also guides you through two tests you might use for the fixed point algorithm.
 
 ## Integration Tests (pass-off)
 
