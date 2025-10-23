@@ -32,4 +32,4 @@ These need information about which columns between the two relations should over
 
 Join must be able to join two relations regardless if they have common attribute names or not.
 
-The `Relation.reorder` operation will be important to interpreting rules the rules may reorder columns in the in the final relation. Test the new operations before using them to evaluate rules as described in the next section.
+Test the new operations before using them to evaluate rules.
