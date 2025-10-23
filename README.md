@@ -26,7 +26,7 @@ Each of these algorithms is described in [RULE_INTERP.md](docs/RULES_INTERP.md).
 - [Project Overview and Major Steps](#project-overview-and-major-steps)
 - [Developer Setup](#developer-setup)
 - [Project Requirements](#project-requirements)
-- [AI Policy for Project 3](#ai-policy-for-project-3)
+- [AI Policy for Project 4](#ai-policy-for-project-4)
 - [Unit Tests](#unit-tests)
 - [Integration Tests (pass-off)](#integration-tests-pass-off)
 - [Code Quality](#code-quality)
@@ -39,14 +39,14 @@ Project 4 is to write an interpreter that uses relational database operations to
 
 <img src="docs/figs/Project 4 Diagram.png" alt="Interpreting Queries" width="915" />
 
-0. Construct Database: already completed in Project 3, creates the relations for the declared schemes and populates them with the declared facts.
+0. **Construct Database**: _already completed in Project 3_, creates the relations for the declared schemes and populates them with the declared facts.
 0. **Solve Body Predicates**: this step is first in evaluating the rule in the Datalog program input. Each predicate in the list of predicates for the rule is **interpreted as a query to create a relation**. You should reuse the `Relation.eval_query` function to complete this step.
-0. **Join Body Predicates**: every body predicated is combined with a join operation. You need it implement, and test, `Relation.join` as part of this project (see [JOIN_ALGORITHM.md](./docs/JOIN_ALGORITHM.md)).
+0. **Join Body Predicates**: every body predicate is combined with one or more join operation(s). You need it implement and test `Relation.join` as part of this project (see [JOIN_ALGORITHM.md](./docs/JOIN_ALGORITHM.md)).
 0. **Project and Reorder Columns Specified by Head Predicate**: the head predicate ultimately decides the final relation. The result of the previous step needs to be projected and reordered according to the head predicate (see [EVALUATE_RULE_ALGORITHM.md](./docs/EVALUATE_RULE_ALGORITHM.md)).
 0. **Rename with Database for Union Compatibility**: here the relation from the previous step is has its attributes renamed to match the header of the corresponding relation in the database. Renaming the attributes is necessary for the union in the next step to work.
 0. **Union with Database Relation**: all the facts generated for the relation from evaluating the rule are added to the corresponding relation in the database with the `Relation.union` operator.
 0. **Goto step 0 and Repeat if any Relation Gets New Facts**: we call this a _fix_point_ because we repeat evaluating all rules until no new facts are learned for any relation.
-0. Evaluate Queries: already completed in Project 3 (see [FIX_POINT_ALGORITHM.md](./docs/FIX_POINT_ALGORITHM.md)).
+0. **Evaluate Queries**: _already completed in Project 3_ (see [FIX_POINT_ALGORITHM.md](./docs/FIX_POINT_ALGORITHM.md)).
 
 ## Developer Setup
 
@@ -65,29 +65,29 @@ Here are the files to copy from Project 3 into the `src/project4/` folder:
 
 The `token.py` file is unchanged here and should not be copied over. Other test files from older projects can be copied as needed.
 
-**You need to fix all the imports in the copied file to replace `project3` with `project4` in the import path. You also need to make these changes in all the docstring tests. We recommend the use of the search feature in `vscode`, the magnifying class in the sidebar, to search for `project3` in all files.**
+**You need to fix all the imports in the copied file to replace `project3` with `project4` in the import path. You also need to make these changes in all the docstring tests. We recommend the use of the search feature in `vscode`, the magnifying glass in the sidebar, to search for `project3` in all files.**
 
 ## Project Requirements
 
 1. The project must be completed individually -- there is no group work.
-1. Project pass-off is on GitHub. You will commit your final solution to the `master` branch of your local repository and then push that commit to GitHub. Multiple commits, and pushes, are allowed. A push triggers a GitHub action that is the auto-grader for pass-off. The TAs look at both the result of the auto-grader on GitHub and your code to determine your final score. Projects that use iteration instead of tail recursion will not be accepted.
+1. Project pass-off is on GitHub. You will commit your final solution to the `master` branch of your local repository and then push that commit to GitHub. Multiple commits, and pushes, are allowed. A push triggers a GitHub action that is the auto-grader for pass-off. The TAs look at both the result of the auto-grader on GitHub and your code to determine your final score. _See the cautions in the `#project-3` channel of the class Discord server about how using `fstrings` can cause problems with pass-offs._ 
 1. You must pass all integration tests up to, and including, `tests/test_passoff_80.py` to move on to the next project. Bucket 80 is the minimum functionality to complete the course.
-1. You must **use the math you did in Homework 16** to tests in `tests/test_relation.py` for `Relation.join` in `src/project3/relation.py`. AI may be used to generate the code for the tests once you **_"do the math"_** for the inputs and outputs and write a few examples for the AI to follow using your inputs and outputs. See [AI Policy for Project 3](#ai-policy-for-project-3) for details.
+1. You must **use the math you did in Homework 16** to tests in `tests/test_relation.py` for `Relation.join` in `src/project3/relation.py`. AI may be used to generate the code for the tests once you **_"do the math"_** for the inputs and outputs and write a few examples for the AI to follow using your inputs and outputs. See [AI Policy for Project 4](#ai-policy-for-project-4) for details.
 1. You must implement `Relation.join` in `src/project3/relation.py`. **AI may not be used for any part of the implementation.**
-1. You must **use the math you did in Homework 16** to write tests for `Interpreter.eval_rules` in `src/project3/interpreter.py`. AI may be used to generate the code for the tests once you **_"do the math"_** for the inputs and outputs and write a few examples for the AI to follow using your inputs and outputs. See [AI Policy for Project 3](#ai-policy-for-project-3) for details.
+1. You must **use the math you did in Homework 16** to write tests for `Interpreter.eval_rules` in `src/project3/interpreter.py`. AI may be used to generate the code for the tests once you **_"do the math"_** for the inputs and outputs and write a few examples for the AI to follow using your inputs and outputs. See [AI Policy for Project 4](#ai-policy-for-project-4) for details.
 1. You must interpret the Datalog program, including the rules, with relational algebra by implementing `Interpreter.eval_rules` in `src/project3/interpreter.py`. The other functions will be implemented in later projects. See [RULES_INTERP.md](docs/RULES_INTERP.md) for details. You must use `Relation.union` to add facts generated by rules to relations. **AI may not be used for any part of the implementation.**
 1. Your code must not report any issues with the following code quality tool run in the integrated `vscode` terminal from the root of the project directory: `pre-commit run --all-files`. This tool includes _type checking_, which means that type annotations are required in your code.
-1. Your code must pass each bucket in 150 seconds or less. If you have trouble meeting this requirement, see the FAQ in [RULES_INTERP](docs/RULES_INTERP.md).
+1. Your code must pass each bucket in 150 seconds or less. If you have trouble meeting this requirement, see the FAQ in [RULES_INTERP.md](docs/RULES_INTERP.md).
 
 Consider using a branch as you work on your submission so that you can `commit` your work from time to time. Once everything is working, and the auto-grader tests are passing, then you can `merge` your work into your master branch and push it to your GitHub repository. Ask your favorite AI for help learning how to use Git branches for feature development.
 
 ## AI Policy for Project 4
 
-Project 4 code is very algorithmic and specific to interpreting Datalog rules. It does not include repeated code with similar structure that AI can learn, adapt, and repeat. As such, you are expected to write all the implementation code for `Relation.join` class and `Interpreter.eval_rules` class without any AI assist.
+Project 4 code is very algorithmic and specific to interpreting Datalog rules. It does not include repeated code with similar structure that AI can learn, adapt, and repeat. As such, you are expected to write all the implementation code for `Relation.join` class and `Interpreter.eval_rules` class without any AI assistance.
 
 AI may be used to help generate code for tests. You've already done the math in Homework 16, and you use the math from Homework 16 as part of the prompts for AI to generate the test code for your given input and output relations.
 
-We recommend that the test code for `eval_rules` be parameterized since the test for each input is the same while there should be least one test for each input partition.
+We recommend that the test code for `eval_rules` be parameterized since the test for each input is the same while there should be least one test for each input partition. See the Jupyter notebook in the `docs` folder of 3 for a discussion of how to write parameterized tests.
 
 ## Unit Tests
 
@@ -145,3 +145,5 @@ Here is the suggested order for Project 4:
     1. Write code to pass the positive test.
 
 1. Run the pass-off tests -- debug as needed.
+
+Note that you've "done the math" for writing most of these tests in Homework 16.
