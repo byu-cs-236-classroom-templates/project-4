@@ -105,7 +105,7 @@ Pre-commit must run on all the files and report no errors.
 
 The minimum standard for this project is **bucket 80**. That means that if all the tests pass in all buckets up to and including bucket 80, then the next project can be started safely. You can run each bucket from the testing pane or with `pytest` on the command line. Passing everything up to and including `test_passoff_80.py` is the minimum requirement to move on to the next project.
 
-Submit Project 2 for grading by doing the following:
+Submit Project 4 for grading by doing the following:
 
   * Commit your solution on the master branch
   * Push the commit to GitHub -- that should trigger the auto-grader
