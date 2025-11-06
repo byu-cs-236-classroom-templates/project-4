@@ -37,7 +37,7 @@ Each of these algorithms is described in [RULE_INTERP.md](docs/RULES_INTERP.md).
 
 Project 4 is to write an interpreter that uses relational database operations to evaluate the rules in a Datalog Program. At the end of this project, you will have a fully functional Datalog interpreter. Here is a diagram illustrating the project with a given Datalog program input on the left of the diagram.
 
-<img src="docs/figs/Project 4 Diagram.png" alt="Interpreting Queries" width="915" />
+<img src="docs/figs/Project 4 Diagram.png" alt="Interpreting Rules" width="915" />
 
 0. **Construct Database**: _already completed in Project 3_, creates the relations for the declared schemes and populates them with the declared facts.
 0. **Solve Body Predicates**: this step is first in evaluating the rule in the Datalog program input. Each predicate in the list of predicates for the rule is **interpreted as a query to create a relation**. You should reuse the `Relation.eval_query` function to complete this step.
