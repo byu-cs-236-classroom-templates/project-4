@@ -19,6 +19,7 @@ Each of these algorithms is described in [RULE_INTERP.md](docs/RULES_INTERP.md).
 - [CODE.md](docs/CODE.md): describes the starter code
 - [Evaluating_Rules_Algorithm.pdf](docs/Evaluating_Rules_Algorithm.pdf): gives a step-by-step example of applying natural join and the rule evaluation algorithm for a specific Datalog program.
 - Lecture notes in [learningsuite.byu.edu](https://learningsuite.byu.edu) and specifically the slides in the lecture _Project 4 Discussion_.
+- [EXPR.md](docs/EXPR.md): describes how to add expressions to the rule interpreter for deeper learning.
 
 **You are strongly encouraged to review the above documentation _before_ proceeding further**.
 
@@ -32,6 +33,7 @@ Each of these algorithms is described in [RULE_INTERP.md](docs/RULES_INTERP.md).
 - [Code Quality](#code-quality)
 - [Submission And Grading](#submission-and-grading)
 - [Best Practices](#best-practices)
+- [Deeper Learning](#deeper-learning)
 
 ## Project Overview and Major Steps
 
@@ -155,3 +157,9 @@ Here is the suggested order for Project 4:
 1. Run the pass-off tests -- debug as needed.
 
 Note that you've "done the math" for writing most of these tests in Homework 16.
+
+## Deeper Learning
+
+**There is no extra credit for deeper learning as the learning is the reward**.
+
+This deeper learning builds on the expressions that were added to the grammar from the deeper learning in Project 2 by implementing the semantics for the expressions as part of the rule evaluation. The details are found in [EXPR.md](docs/EXPR.md). Project 2 parsed the expressions to create an expression tree. Evaluating expressions requires structural recursion of the expression tree. This deeper learning covers critical topics for compilers and interpreters. If these are topics that you enjoy, then consider taking CS 330!
