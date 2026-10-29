@@ -8,4 +8,7 @@
 
   "mypy.mypyExecutable": "${workspaceFolder}/.venv/bin/mypy",
   "mypy.configFile": "pyproject.toml",
+
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
 }
