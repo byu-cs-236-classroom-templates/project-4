@@ -25,7 +25,7 @@ Evaluate each rule using relational algebra operations as follows:
 
     The predicates in the body of a rule may have variables that are not used in the head of the rule.  Use a project operation on the result from Step 2 to remove the columns that don't appear in the head of the rule and to reorder the columns to match the order in the head.
 
-4. **Reorder the columns of the relation to produce the order in the head predicate:**
+4. **Transpose (reorder) the columns of the relation to produce the order in the head predicate:**
     The variables in the head predicate may appear in a different order than the columns of the relation produced in the previous step
 
 5. **Rename the relation to make it union-compatible:**
