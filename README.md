@@ -107,13 +107,13 @@ Pre-commit must run on all the files and report no errors.
 
 The minimum standard for this project is **bucket 80**. That means that if all the tests pass in all buckets up to and including bucket 80, then the next project can be started safely. You can run each bucket from the testing pane or with `pytest` on the command line. Passing everything up to and including `test_passoff_80.py` is the minimum requirement to move on to the next project.
 
-Submit Project 3 for grading by doing the following:
+Submit Project 4 for grading by doing the following:
 
 * Commit your solution on the `master` branch.
 * Submit your project to the auto-grader using **one** of the methods below. Using `gh student submit` is the preferred method.
 * Go to [learningsuite.byu.edu](https://learningsuite.byu.edu) at *Assignments* → *Projects* → *Project 4* to submit the following:
 
-  1. Your GitHub ID and Project 3 URL for grading.
+  1. Your GitHub ID and Project 4 URL for grading.
   2. A short paragraph outlining (a) how you prompted the AI to generate any code (if you used it) and (b) how you determined the quality and correctness of that code.
   3. A screen shot showing no issues with `pre-commit run --all-files`.
 * Confirm on [classroom50.org](https://classroom50.org/login) that the pass-off tests passed.
@@ -123,7 +123,7 @@ A normal `git push` does **not** run the Project 4 auto-grader. You must explici
 * `gh student submit` (preferred) or
 * `submit/*` tagged commit with `git` (not preferred).
 
-Refer to the `README.md` files for either project 2 or project 3 for instructions.
+Refer to the `README.md` files for either Project 2 or Project 3 for instructions.
 
 ### Paragraph on AI
 
